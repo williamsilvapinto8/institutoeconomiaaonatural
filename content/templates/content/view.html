@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.title }} — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<h2>{{ item.title }}</h2>
+<p style="color: #666;">Evento: {{ item.event.title }}</p>
+
+{% if item.description %}
+    <div style="margin-top: 1rem; border-left: 4px solid #51B0C4; padding-left: 1rem;">
+        {{ item.description|linebreaks }}
+    </div>
+{% endif %}
+
+<div style="margin-top: 2rem;">
+    {% if item.file %}
+        <a href="{{ item.file.url }}" target="_blank" class="btn" style="background-color: #236B86;">Baixar Arquivo / Visualizar</a>
+    {% endif %}
+    {% if item.external_url %}
+        <a href="{{ item.external_url }}" target="_blank" class="btn" style="background-color: #236B86; margin-left: 1rem;">Acessar Link Externo</a>
+    {% endif %}
+</div>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'dashboard' %}" style="color: #666; text-decoration: none;">&larr; Voltar ao Painel</a>
+</div>
+{% endblock %}

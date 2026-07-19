@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Questionario de Impacto — {{ impact_form.event.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ impact_form.event.title }}</h2>
+<p>Por favor, responda as perguntas abaixo baseando-se em sua experiencia no evento.
+Escala: 1 (Discordo Totalmente/Muito Insatisfeito) a 5 (Concordo Totalmente/Muito Satisfeito).</p>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div style="margin-bottom: 2rem;">
+        {% for q in likert_questions %}
+            <div style="border-bottom: 1px solid #eee; padding: 1rem 0;">
+                <p><strong>{{ q.order }}. {{ q.text }}</strong></p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    {% for i in '12345'|make_list %}
+                        <label style="cursor: pointer; display: flex; align-items: center; gap: 0.3rem;">
+                            <input type="radio" name="q_{{ q.id }}" value="{{ i }}" required> {{ i }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if open_questions %}
+        <h3>Perguntas Abertas (Opcionais)</h3>
+        {% for q in open_questions %}
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label><strong>{{ q.order }}. {{ q.text }}</strong></label>
+                <textarea name="q_{{ q.id }}" rows="3" style="width: 100%; padding: 0.5rem;"></textarea>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+        <button type="submit" class="btn">Enviar Respostas</button>
+        <a href="{% url 'dashboard' %}" style="margin-left: 1rem; color: #666; text-decoration: none;">Cancelar</a>
+    </div>
+</form>
+{% endblock %}

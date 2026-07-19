@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ evento.title }} — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span style="display: inline-block; background: #236B86; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.9em; margin-bottom: 1rem;">
+            {{ evento.event_type.name }}
+        </span>
+        <h1 style="margin: 0; color: #236B86; font-size: 2.5em;">{{ evento.title }}</h1>
+    </div>
+
+    <div style="background: #f4f7f6; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+        <div>
+            <strong>📅 Data e Hora:</strong><br>
+            {{ evento.date|date:"d/m/Y" }}<br>
+            {{ evento.start_time|time:"H:i" }} às {{ evento.end_time|time:"H:i" }}
+        </div>
+        <div>
+            <strong>📍 Localização:</strong><br>
+            {% if evento.is_online %}
+                Online ({{ evento.online_platform }})
+            {% else %}
+                {{ evento.location }}
+            {% endif %}
+        </div>
+        {% if evento.max_participants %}
+        <div>
+            <strong>👥 Vagas Restantes:</strong><br>
+            {% if evento.vacancies_left > 0 %}
+                <span style="color: #F3913A; font-weight: bold;">{{ evento.vacancies_left }}</span>
+            {% else %}
+                <span style="color: red; font-weight: bold;">Esgotado</span>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="line-height: 1.6; margin-bottom: 2rem;">
+        <h3>Sobre o Evento</h3>
+        <p style="white-space: pre-line;">{{ evento.description|default:"Detalhes em breve." }}</p>
+    </div>
+
+    {% if evento.benegnadores.all %}
+    <div style="margin-bottom: 2rem;">
+        <h3>Facilitadores (Benegnadores)</h3>
+        <ul style="list-style: none; padding: 0;">
+        {% for palestrante in evento.benegnadores.all %}
+            <li style="margin-bottom: 0.5rem;">
+                <strong>{{ palestrante.name }}</strong>
+                {% if palestrante.bio %} - {{ palestrante.bio|truncatewords:20 }}{% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee;">
+        {% if is_enrolled %}
+            <div class="alert alert-success">
+                <strong>✔ Você já está inscrito neste evento!</strong><br>
+                <a href="{% url 'dashboard' %}" style="color: #155724; text-decoration: underline;">Acesse seu painel</a> para mais detalhes.
+            </div>
+        {% else %}
+            {% if not evento.is_public_enrollment_open %}
+                <div class="alert alert-error">
+                    As inscrições para este evento estão encerradas.
+                </div>
+            {% elif evento.vacancies_left is not None and evento.vacancies_left <= 0 %}
+                <div class="alert alert-error">
+                    As vagas para este evento esgotaram.
+                </div>
+            {% else %}
+                {% if user.is_authenticated %}
+                    {% if is_cancelled %}
+                        <div class="alert alert-warning" style="margin-bottom: 1rem;">
+                            Sua inscrição foi cancelada anteriormente. Deseja reativar?
+                        </div>
+                    {% endif %}
+                    <form method="post" action="{% url 'enroll_event' evento.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" style="background-color: #F3913A; font-size: 1.2em; padding: 1rem 3rem;">
+                            Inscrever-se Agora
+                        </button>
+                    </form>
+                {% else %}
+                    <p style="margin-bottom: 1rem;">Para se inscrever, você precisa ter uma conta no Instituto.</p>
+                    <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn">Entrar</a>
+                    <a href="{% url 'accounts:signup' %}?next={{ request.path }}" class="btn" style="background-color: #F3913A;">Criar Conta</a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

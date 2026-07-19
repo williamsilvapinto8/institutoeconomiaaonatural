@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel Administrativo: Respostas - {{ evento.title }}{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h2>Respostas do Evento: {{ evento.title }}</h2>
+    <p>Acompanhe os usuários inscritos (confirmados) e envie lembretes para aqueles que ainda não preencheram o formulário de impacto.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <!-- Lista de Quem Já Respondeu -->
+    <div class="card" style="padding: 1.5rem; border: 1px solid #ddd; border-radius: 8px;">
+        <h3 style="color: #236B86; margin-top:0;">Já Responderam ({{ responded|length }})</h3>
+        {% if responded %}
+            <ul style="list-style: none; padding: 0;">
+            {% for inscricao in responded %}
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>{{ inscricao.benegnado.user.get_full_name }}</strong><br>
+                    <small style="color: #666;">{{ inscricao.benegnado.user.email }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Ninguém respondeu ainda.</p>
+        {% endif %}
+    </div>
+
+    <!-- Lista de Quem Ainda Não Respondeu -->
+    <div class="card" style="padding: 1.5rem; border: 1px solid #ddd; border-radius: 8px;">
+        <h3 style="color: #F3913A; margin-top:0;">Pendentes ({{ pending|length }})</h3>
+        {% if pending %}
+            <ul style="list-style: none; padding: 0;">
+            {% for inscricao in pending %}
+                <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>{{ inscricao.benegnado.user.get_full_name }}</strong><br>
+                    <small style="color: #666;">{{ inscricao.benegnado.user.email }}</small>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Todos os participantes responderam!</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Formulário de Envio de Lembrete -->
+{% if pending %}
+<div class="card" style="margin-top: 2rem; padding: 2rem; border-radius: 8px; background: linear-gradient(135deg, #f9f9f9, #ffffff); border: 1px solid #e0e0e0;">
+    <h3 style="color: #51B0C4; margin-top:0;">Enviar Lembrete para os Pendentes</h3>
+    <p style="margin-bottom: 1.5rem; color: #555;">
+        O e-mail será enviado individualmente em segundo plano para os {{ pending|length }} participantes pendentes. 
+        O pixel de rastreamento de abertura será adicionado automaticamente (invisível).
+        <br><em>Variáveis disponíveis:</em> <code>{nome}</code> (Primeiro nome), <code>{evento}</code> (Título do evento), <code>{link}</code> (Link clicável para o formulário).
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="subject" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Assunto</label>
+            <input type="text" id="subject" name="subject" required 
+                   value="Lembrete: Formulário de Impacto - {evento}"
+                   style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="body" style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Mensagem</label>
+            <textarea id="body" name="body" required rows="6" 
+                      style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;">Olá, {nome}!
+
+Gostaríamos de lembrar que o formulário de impacto para o evento "{evento}" aguarda suas respostas.
+
+Acesse o formulário clicando no link abaixo:
+{link}
+
+Seu feedback é fundamental para nós!</textarea>
+        </div>
+        
+        <button type="submit" class="btn" style="background-color: #236B86; color: white; padding: 0.75rem 2rem; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+            Enviar Lembretes na Fila
+        </button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

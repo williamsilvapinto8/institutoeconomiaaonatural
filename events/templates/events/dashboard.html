@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Painel do Participante — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<h2>Seus Eventos</h2>
+
+{% if not user.benegnado %}
+    <div class="alert alert-error">
+        Seu perfil de participante (Benegnado) nao foi encontrado. Entre em contato com o administrador.
+    </div>
+{% else %}
+    <div style="margin-bottom: 2rem;">
+        <a href="{% url 'public_event_list' %}" class="btn" style="background-color: #F3913A;">Ver Eventos Disponíveis para Inscrição</a>
+    </div>
+
+    {% if not user_eventos %}
+        <p>Você ainda não está inscrito em nenhum evento.</p>
+    {% else %}
+        <div style="display: grid; gap: 1rem;">
+        {% for item in user_eventos %}
+            <div style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px;">
+                <h3 style="margin-top: 0; color: #236B86;"><a href="{% url 'public_event_detail' item.evento.public_slug %}" style="text-decoration:none; color:inherit;">{{ item.evento.title }}</a></h3>
+                <p><strong>Data:</strong> {{ item.evento.date }}</p>
+                <p><strong>Local:</strong> {{ item.evento.location|default:"Online" }}</p>
+                <p><strong>Status da Inscrição:</strong> 
+                    {% if item.inscricao.status == 'CONFIRMED' %}
+                        <span style="color: #155724;">Confirmada</span>
+                    {% else %}
+                        <span style="color: #721c24;">Cancelada</span>
+                    {% endif %}
+                </p>
+                
+                <div style="margin-top: 1rem; display: flex; gap: 10px; align-items: center;">
+                    {% if item.inscricao.status == 'CONFIRMED' %}
+                        {% if item.responded %}
+                            <span style="color: #155724; font-weight: bold;">✔ Formulário de Impacto Respondido</span>
+                        {% else %}
+                            {% for form in item.evento.impact_forms.all %}
+                                <a href="{% url 'impact_forms:impact_respond' form.id %}" class="btn">Responder Formulário</a>
+                            {% empty %}
+                                <span style="color: #666;">Sem formulário de impacto cadastrado</span>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form method="post" action="{% url 'unenroll_event' item.evento.id %}" onsubmit="return confirm('Tem certeza que deseja cancelar sua inscrição?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn" style="background-color: #721c24;">Cancelar Inscrição</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'enroll_event' item.evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn">Reativar Inscrição</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

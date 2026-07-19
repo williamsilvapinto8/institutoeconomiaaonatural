@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Entrar — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<h2>Entrar no Sistema</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username">Nome de Usuario ou E-mail</label>
+        <input type="text" name="username" id="username" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" name="password" id="password" required>
+    </div>
+    <button type="submit" class="btn">Entrar</button>
+</form>
+
+<p style="margin-top: 1rem;">
+    Ainda nao tem conta? <a href="{% url 'accounts:signup' %}">Cadastre-se aqui</a>
+</p>
+{% endblock %}

@@ -1,0 +1,8 @@
+django>=5.0,<6.0
+django-environ==0.11.2
+psycopg2-binary==2.9.12
+djangorestframework==3.15.2
+django-q2==1.7.3
+gunicorn==22.0.0
+openpyxl==3.1.5
+Pillow>=11.0

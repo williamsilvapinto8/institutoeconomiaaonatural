@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<h2>Cadastro de Participante</h2>
+<p>Junte-se a nos para acompanhar eventos e materiais de sustentabilidade.</p>
+
+<form method="post">
+    {% csrf_token %}
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-error">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <div style="color: #721c24; font-size: 0.9em;">
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+            {% if field.help_text %}
+                <small style="color: #666;">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn">Cadastrar</button>
+</form>
+
+<p style="margin-top: 1rem;">
+    Ja possui uma conta? <a href="{% url 'accounts:login' %}">Faca login</a>
+</p>
+{% endblock %}

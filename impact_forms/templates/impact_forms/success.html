@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Sucesso — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 2rem;">
+    <h2 style="color: #236B86;">Operacao Concluida!</h2>
+    <p>Obrigado! Sua acao foi registrada com sucesso.</p>
+    <a href="{% url 'dashboard' %}" class="btn" style="margin-top: 1rem;">Voltar ao Painel</a>
+</div>
+{% endblock %}

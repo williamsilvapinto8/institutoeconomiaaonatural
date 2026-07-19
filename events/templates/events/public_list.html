@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Eventos Abertos — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 2rem;">
+    <h2>Próximos Eventos</h2>
+    <p>Participe de nossos eventos e amplie seu conhecimento sobre sustentabilidade corporativa.</p>
+</div>
+
+{% if not eventos %}
+    <div class="alert alert-info">
+        No momento não há eventos com inscrições abertas. Fique de olho em nossas redes sociais para novidades!
+    </div>
+{% else %}
+    <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+    {% for evento in eventos %}
+        <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+            <div style="background: linear-gradient(135deg, #236B86, #51B0C4); padding: 1.5rem; color: white;">
+                <h3 style="margin: 0;">{{ evento.title }}</h3>
+                <span style="font-size: 0.9em; opacity: 0.9;">{{ evento.event_type.name }}</span>
+            </div>
+            <div style="padding: 1.5rem; flex-grow: 1;">
+                <p><strong>Data:</strong> {{ evento.date }} às {{ evento.start_time|time:"H:i" }}</p>
+                <p><strong>Local:</strong> {{ evento.location|default:"Online" }}</p>
+                {% if evento.max_participants %}
+                    <p style="color: #F3913A; font-weight: bold;">
+                        {% if evento.vacancies_left > 0 %}
+                            Apenas {{ evento.vacancies_left }} vagas restantes!
+                        {% else %}
+                            Esgotado
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+            <div style="padding: 1.5rem; border-top: 1px solid #eee; background: #fafafa; text-align: center;">
+                <a href="{% url 'public_event_detail' evento.public_slug %}" class="btn" style="width: 100%; display: block; box-sizing: border-box;">
+                    Saiba Mais e Inscreva-se
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

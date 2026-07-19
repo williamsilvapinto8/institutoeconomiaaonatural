@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Instituto Economia ao Natural{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div><strong>Instituto Economia ao Natural</strong></div>
+        <div>
+            {% if user.is_authenticated %}
+                <span>Ola, {{ user.first_name|default:user.username }}!</span>
+                <a href="{% url 'accounts:logout' %}">Sair</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Entrar</a>
+                <a href="{% url 'accounts:signup' %}">Cadastrar-se</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            <div class="alerts">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Criar Novo Evento — Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    <h2 style="margin-top: 0; color: #236B86; border-bottom: 2px solid #51B0C4; padding-bottom: 10px;">Publicar Novo Evento</h2>
+    <p>Preencha os dados abaixo para gerar a página pública e abrir as inscrições.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="title" style="display: block; font-weight: bold; margin-bottom: 5px;">Título do Evento</label>
+            <input type="text" id="title" name="title" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="description" style="display: block; font-weight: bold; margin-bottom: 5px;">Descrição</label>
+            <textarea id="description" name="description" rows="5" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;"></textarea>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="event_type" style="display: block; font-weight: bold; margin-bottom: 5px;">Tipo de Evento</label>
+            <select id="event_type" name="event_type" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+                <option value="">Selecione...</option>
+                {% for t in event_types %}
+                    <option value="{{ t.id }}">{{ t.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group" style="flex: 1;">
+                <label for="date" style="display: block; font-weight: bold; margin-bottom: 5px;">Data</label>
+                <input type="date" id="date" name="date" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="start_time" style="display: block; font-weight: bold; margin-bottom: 5px;">Início</label>
+                <input type="time" id="start_time" name="start_time" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="end_time" style="display: block; font-weight: bold; margin-bottom: 5px;">Término</label>
+                <input type="time" id="end_time" name="end_time" required style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">
+                <input type="checkbox" id="is_online" name="is_online"> Este evento é Online
+            </label>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label for="location" style="display: block; font-weight: bold; margin-bottom: 5px;">Local Físico</label>
+            <input type="text" id="location" name="location" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+        
+        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group" style="flex: 1;">
+                <label for="online_platform" style="display: block; font-weight: bold; margin-bottom: 5px;">Plataforma Online</label>
+                <input type="text" id="online_platform" name="online_platform" placeholder="Ex: Zoom, Meet" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label for="online_link" style="display: block; font-weight: bold; margin-bottom: 5px;">Link da Transmissão</label>
+                <input type="url" id="online_link" name="online_link" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            </div>
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 2rem;">
+            <label for="max_participants" style="display: block; font-weight: bold; margin-bottom: 5px;">Limite de Vagas (Opcional)</label>
+            <input type="number" id="max_participants" name="max_participants" min="1" placeholder="Deixe em branco para ilimitado" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+            <a href="{% url 'dashboard' %}" class="btn" style="background: #ccc; color: #333;">Cancelar</a>
+            <button type="submit" class="btn">Publicar Evento</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
