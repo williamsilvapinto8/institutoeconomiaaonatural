@@ -7,43 +7,61 @@ def populate_default_questions(apps, schema_editor):
     ImpactQuestion = apps.get_model('impact_forms', 'ImpactQuestion')
 
     # Dimensions
-    dim_conscientizacao, _ = ImpactDimension.objects.get_or_create(
-        name="Conscientizacao",
-        defaults={'code': 'CONS', 'weight': 0.33}
+    dim_d1, _ = ImpactDimension.objects.get_or_create(
+        name="Consciência e Identidade",
+        defaults={'code': 'D1', 'weight': 0.25}
     )
-    dim_educacao, _ = ImpactDimension.objects.get_or_create(
-        name="Educacao",
-        defaults={'code': 'EDUC', 'weight': 0.33}
+    dim_d2, _ = ImpactDimension.objects.get_or_create(
+        name="Coerência e Atitudes",
+        defaults={'code': 'D2', 'weight': 0.30}
     )
-    dim_acao, _ = ImpactDimension.objects.get_or_create(
-        name="Acao",
-        defaults={'code': 'ACAO', 'weight': 0.34}
+    dim_d3, _ = ImpactDimension.objects.get_or_create(
+        name="Relações",
+        defaults={'code': 'D3', 'weight': 0.25}
+    )
+    dim_d4, _ = ImpactDimension.objects.get_or_create(
+        name="Contribuição",
+        defaults={'code': 'D4', 'weight': 0.20}
     )
 
     questions_data = [
-        # Conscientizacao
-        (dim_conscientizacao, 'Em que medida este evento aumentou sua compreensao sobre as praticas de sustentabilidade?'),
-        (dim_conscientizacao, 'Como voce avalia a clareza das informacoes apresentadas durante o evento?'),
-        (dim_conscientizacao, 'Qual foi o impacto do evento na sua percepcao sobre a importancia da economia circular?'),
+        # D1
+        (dim_d1, 'Sinto que minhas decisões estão mais alinhadas com meu propósito.', False),
+        (dim_d1, 'Compreendo melhor meus padrões emocionais.', False),
+        (dim_d1, 'Evito culpar fatores externos quando não alcanço os resultados esperados.', False),
+        (dim_d1, 'A Escola de Oportunidade marcou uma virada importante na minha trajetória.', False),
         
-        # Educacao
-        (dim_educacao, 'O quao uteis foram os materiais educativos disponibilizados no evento?'),
-        (dim_educacao, 'Em que grau os palestrantes/facilitadores demonstraram dominio sobre os temas abordados?'),
-        (dim_educacao, 'Como o evento contribuiu para o seu desenvolvimento profissional na area de ESG?'),
+        # D2
+        (dim_d2, 'Passei a tomar decisões mais alinhadas aos meus valores.', False),
+        (dim_d2, 'Incorporei novos hábitos positivos após a EO.', False),
+        (dim_d2, 'Encaro desafios com mais maturidade e consciência.', False),
+        (dim_d2, 'Sinto maior coerência entre o que penso e o que faço.', False),
         
-        # Acao
-        (dim_acao, 'O evento motivou voce a implementar praticas mais sustentaveis em sua organizacao/dia a dia?'),
-        (dim_acao, 'Qual a probabilidade de voce adotar uma nova pratica de sustentabilidade no proximo mes devido a este evento?'),
-        (dim_acao, 'O quao preparado(a) voce se sente para compartilhar os conhecimentos adquiridos com outras pessoas?'),
-        (dim_acao, 'Como voce avalia as oportunidades de networking oferecidas para futuras colaboracoes em sustentabilidade?'),
+        # D3
+        (dim_d3, 'Tenho conseguido levar em consideração opiniões diferentes das minhas.', False),
+        (dim_d3, 'Me comunico com mais clareza e respeito.', False),
+        (dim_d3, 'Lido melhor com conflitos do que antes.', False),
+        (dim_d3, 'Pessoas próximas perceberam mudanças positivas em mim.', False),
+        
+        # D4
+        (dim_d4, 'Passei a apoiar mais o desenvolvimento de outras pessoas.', False),
+        (dim_d4, 'Compartilho os aprendizados da EO no meu cotidiano.', False),
+        (dim_d4, 'Estou mais envolvido em iniciativas coletivas (no meu bairro, igreja, na minha comunidade de amigos, etc.).', False),
+        (dim_d4, 'Acredito que minha mudança influencia outras pessoas.', False),
+        
+        # Abertas (Sem dimensão vinculada obrigatoriamente para pontuação, mas pode vincular a uma delas ou deixar dimensão, no schema dimension é ForeignKey, então vinculamos a D4 ou D1. A view sabe que é aberta)
+        (dim_d4, 'Você poderia nos dizer qual mudança mais significativa você percebe em si mesmo desde o início da EO?', True),
+        (dim_d4, 'E onde essa mudança aparece na prática no seu cotidiano? Poderia nos dar alguns exemplos?', True),
+        (dim_d4, 'E para finalizar, como você acredita que estaria hoje se não tivesse participado da EO?', True),
     ]
 
-    for order, (dimension, text) in enumerate(questions_data, start=1):
+    for order, (dimension, text, is_open) in enumerate(questions_data, start=1):
         ImpactQuestion.objects.get_or_create(
             text=text,
             defaults={
                 'dimension': dimension,
-                'order': order
+                'order': order,
+                'is_open': is_open
             }
         )
 

@@ -29,8 +29,17 @@ def dashboard_view(request):
             })
     except Exception:
         user_eventos = []
+        benegnado = None
     
-    return render(request, 'events/dashboard.html', {'user_eventos': user_eventos})
+    is_benegnador = hasattr(request.user, 'benegnador')
+    
+    context = {
+        'user_eventos': user_eventos,
+        'has_benegnado': benegnado is not None,
+        'is_benegnador': is_benegnador,
+    }
+    
+    return render(request, 'events/dashboard.html', context)
 
 
 def public_event_list(request):

@@ -3,17 +3,20 @@
 {% block title %}Painel do Participante — Instituto Economia ao Natural{% endblock %}
 
 {% block content %}
-<h2>Seus Eventos</h2>
+<h2>Painel de Controle</h2>
 
-{% if not user.benegnado %}
-    <div class="alert alert-error">
-        Seu perfil de participante (Benegnado) nao foi encontrado. Entre em contato com o administrador.
-    </div>
-{% else %}
-    <div style="margin-bottom: 2rem;">
-        <a href="{% url 'public_event_list' %}" class="btn" style="background-color: #F3913A;">Ver Eventos Disponíveis para Inscrição</a>
-    </div>
+<div style="margin-bottom: 2rem; display: flex; gap: 10px; flex-wrap: wrap;">
+    {% if user.is_staff %}
+        <a href="{% url 'admin:index' %}" class="btn" style="background-color: #236B86;">Administração</a>
+    {% endif %}
+    {% if user.is_staff or is_benegnador %}
+        <a href="{% url 'create_evento' %}" class="btn" style="background-color: #51B0C4;">Criar Novo Evento</a>
+    {% endif %}
+    <a href="{% url 'public_event_list' %}" class="btn" style="background-color: #F3913A;">Eventos Disponíveis para Inscrição</a>
+</div>
 
+{% if has_benegnado %}
+    <h3 style="margin-top: 2rem;">Minhas Inscrições (Participante)</h3>
     {% if not user_eventos %}
         <p>Você ainda não está inscrito em nenhum evento.</p>
     {% else %}
@@ -31,7 +34,7 @@
                     {% endif %}
                 </p>
                 
-                <div style="margin-top: 1rem; display: flex; gap: 10px; align-items: center;">
+                <div style="margin-top: 1rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     {% if item.inscricao.status == 'CONFIRMED' %}
                         {% if item.responded %}
                             <span style="color: #155724; font-weight: bold;">✔ Formulário de Impacto Respondido</span>
@@ -58,5 +61,15 @@
         {% endfor %}
         </div>
     {% endif %}
+{% else %}
+    <div class="alert alert-info">
+        {% if user.is_staff %}
+            Bem-vindo ao painel, <strong>Administrador</strong>! Utilize os botões acima para gerenciar a plataforma.
+        {% elif is_benegnador %}
+            Bem-vindo ao painel, <strong>Facilitador</strong>! Você pode criar e visualizar os eventos da plataforma nos botões acima.
+        {% else %}
+            Seu perfil de participante (Benegnado) não foi encontrado. Entre em contato com a equipe se precisar de suporte.
+        {% endif %}
+    </div>
 {% endif %}
 {% endblock %}
