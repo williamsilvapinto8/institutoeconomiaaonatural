@@ -22,12 +22,10 @@ services:
       - "8000:8000"
     volumes:
       - sqlite_data:/app/data
-    environment:
-      - DEBUG=False
-      - SECRET_KEY=sua_chave_segura_aqui_para_producao
-      - DB_ENGINE=django.db.backends.sqlite3
-      - DB_NAME=/app/data/db.sqlite3
-      - ALLOWED_HOSTS=institutoeconomiaaonatural.cocrias.com,localhost,127.0.0.1
+    env_file:
+      - .env
+    depends_on:
+      - db
 
 volumes:
   postgres_data:
