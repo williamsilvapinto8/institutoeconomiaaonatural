@@ -1,0 +1,274 @@
+/* Importar fontes do Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;600;700&display=swap');
+
+/* Sobrescrita de Variáveis Globais do Django */
+:root {
+    --primary: #236B86;
+    --primary-fg: #ffffff;
+    --header-bg: #236B86;
+    --header-color: #ffffff;
+    --header-link-color: #ffffff;
+    --breadcrumbs-bg: #f5fafb;
+    --breadcrumbs-link-color: #236B86;
+    --link-color: #236B86;
+    --link-hover-color: #51B0C4;
+    --link-selected-color: #51B0C4;
+    --hairline-color: #e0ecef;
+    --border-color: #d1e2e5;
+    
+    /* Botões Padrão/Submit (Salvar) */
+    --default-button-bg: #F3913A;
+    --default-button-hover-bg: #d97825;
+    --default-button-fg: #ffffff;
+    
+    /* Outros botões */
+    --button-bg: #236B86;
+    --button-hover-bg: #1d5870;
+    --button-fg: #ffffff;
+    
+    /* Corpo */
+    --body-bg: #f9fcfd;
+    --body-fg: #2c3e50;
+    --body-quiet-color: #7f8c8d;
+    
+    /* Fontes */
+    --font-family-sans-serif: 'Inter', sans-serif;
+    --font-family-monospace: monospace;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fcfd;
+}
+
+/* Customização do Header Administrativo */
+#header {
+    background: linear-gradient(135deg, #236B86, #51B0C4) !important;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 15px rgba(35, 107, 134, 0.15);
+    border-bottom: 2px solid #F3913A;
+}
+
+#branding h1 {
+    font-family: 'Oswald', 'Bebas Neue', sans-serif !important;
+    font-weight: 600;
+    font-size: 1.5rem !important;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Adicionando um Logo dinâmico ao lado do Título no Header */
+#branding h1::before {
+    content: "";
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    background: url('/static/images/logo_banner.jpg') no-repeat center;
+    background-size: cover;
+    border-radius: 50%;
+    border: 1.5px solid white;
+}
+
+/* Barra de Usuário no Header */
+#user-tools {
+    font-size: 0.9rem;
+}
+
+#user-tools a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    transition: color 0.2s ease;
+}
+
+#user-tools a:hover {
+    color: #FCCC34 !important; /* Amarelo da ID Visual no Hover */
+}
+
+/* Módulos do Admin */
+.module h2, .module caption, .inline-group h2 {
+    background: #236B86 !important;
+    color: white !important;
+    font-family: 'Oswald', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-radius: 6px 6px 0 0;
+    padding: 10px 15px !important;
+}
+
+.module {
+    border: 1px solid #d1e2e5 !important;
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    margin-bottom: 1.5rem !important;
+    background: white;
+}
+
+/* Breadcrumbs (Caminho de Rota) */
+.breadcrumbs {
+    background: #f5fafb !important;
+    border-bottom: 1px solid #d1e2e5;
+    padding: 0.75rem 2rem !important;
+    font-size: 0.85rem;
+}
+
+.breadcrumbs a {
+    color: #236B86 !important;
+    font-weight: 500;
+}
+
+.breadcrumbs a:hover {
+    color: #51B0C4 !important;
+}
+
+/* Botões do Admin */
+.button, input[type=submit], input[type=button], .submit-row a.deletelink {
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.5px;
+    padding: 10px 18px !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+}
+
+/* Botão Padrão (Salvar) */
+input[type=submit].default, .button.default {
+    background-color: #F3913A !important;
+    box-shadow: 0 2px 5px rgba(243, 145, 58, 0.2);
+}
+
+input[type=submit].default:hover, .button.default:hover {
+    background-color: #d97825 !important;
+    transform: translateY(-1px);
+}
+
+/* Botões de Ação Personalizados */
+.button.button_custom {
+    background-color: #236B86;
+    color: white !important;
+}
+
+/* Tabelas */
+#result_list th {
+    background: #f5fafb !important;
+    color: #236B86 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #d1e2e5 !important;
+}
+
+#result_list tbody tr:hover {
+    background-color: #f0f7f9 !important;
+}
+
+/* Customização do Dashboard Central (Listas de apps) */
+.dashboard #content {
+    display: block;
+}
+
+.dashboard #content-main {
+    float: none;
+    width: 100%;
+}
+
+.dashboard .app-events .module h2 {
+    background: linear-gradient(135deg, #236B86, #51B0C4) !important;
+}
+
+/* Estilização da Tela de Login */
+body.login {
+    background: linear-gradient(135deg, #236B86, #51B0C4) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+body.login #container {
+    background: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    width: 400px !important;
+    overflow: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+body.login #header {
+    background: white !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    padding: 2rem 2rem 1rem 2rem !important;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+body.login #branding h1 {
+    color: #236B86 !important;
+    font-size: 1.8rem !important;
+    flex-direction: column;
+    gap: 15px;
+}
+
+body.login #branding h1::before {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #236B86;
+    box-shadow: 0 4px 10px rgba(35, 107, 134, 0.15);
+}
+
+body.login #content {
+    padding: 0 2.5rem 2.5rem 2.5rem !important;
+}
+
+body.login .form-row {
+    padding: 0.75rem 0 !important;
+    border: none !important;
+}
+
+body.login label {
+    font-weight: 600;
+    color: #236B86;
+    margin-bottom: 5px;
+    display: block;
+}
+
+body.login input[type=text], body.login input[type=password] {
+    width: 100% !important;
+    padding: 10px !important;
+    border: 1px solid #d1e2e5 !important;
+    border-radius: 6px !important;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+}
+
+body.login input[type=text]:focus, body.login input[type=password]:focus {
+    border-color: #51B0C4 !important;
+    outline: none;
+    box-shadow: 0 0 5px rgba(81, 176, 196, 0.2);
+}
+
+body.login .submit-row {
+    padding: 1rem 0 0 0 !important;
+    background: none !important;
+    border: none !important;
+    text-align: center;
+}
+
+body.login input[type=submit] {
+    width: 100% !important;
+    background-color: #F3913A !important;
+    padding: 12px !important;
+    font-size: 0.9rem !important;
+    border-radius: 6px !important;
+}
+
+body.login input[type=submit]:hover {
+    background-color: #d97825 !important;
+}
