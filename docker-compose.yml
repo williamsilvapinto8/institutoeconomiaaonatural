@@ -14,5 +14,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  web:
+    build: .
+    container_name: web_economia_natural
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - sqlite_data:/app/data
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=sua_chave_segura_aqui_para_producao
+      - DB_ENGINE=django.db.backends.sqlite3
+      - DB_NAME=/app/data/db.sqlite3
+      - ALLOWED_HOSTS=institutoeconomiaaonatural.cocrias.com,localhost,127.0.0.1
+
 volumes:
   postgres_data:
+  sqlite_data:
