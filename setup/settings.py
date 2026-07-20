@@ -17,7 +17,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 # SECURITY
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["institutoeconomiaaonatural.cocrias.com", "localhost", "127.0.0.1"])
 
 # Application definition
 INSTALLED_APPS = [
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # causado pelo caractere 'ç' no path do Windows com a biblioteca libpq do PostgreSQL.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': env('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
+        'USER': env('DB_USER', default=''),
+        'PASSWORD': env('DB_PASSWORD', default=''),
+        'HOST': env('DB_HOST', default='localhost'),
+        'PORT': env('DB_PORT', default=''),
     }
 }
 

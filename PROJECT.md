@@ -293,3 +293,23 @@ cron para `process_scheduled_emails`.)
   - Comando CLI para importação de CSV (`import_participants`).
   - Painel de Lembretes no admin com envio assíncrono em massa (`django-q2`).
   - Identidade visual do admin do Django 100% customizada.
+
+---
+
+## 8. Como Rodar o Projeto Localmente (Desenvolvimento)
+
+Para iniciar o ambiente de desenvolvimento local e rodar o projeto na sua máquina, siga os passos abaixo (no terminal da pasta `dev`):
+
+1. **Ative o ambiente virtual:**
+   ```powershell
+   .\venv\Scripts\activate
+   ```
+   *(Nota: Caso utilize o outro ambiente virtual disponível, substitua por `.\venv313\Scripts\activate`)*
+
+2. **Inicie o servidor local do Django:**
+   ```powershell
+   python manage.py runserver
+   ```
+
+3. **Acesse no navegador:**
+   Abra o link `http://127.0.0.1:8000/` para visualizar o sistema.
