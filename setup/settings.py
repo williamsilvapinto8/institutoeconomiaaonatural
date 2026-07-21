@@ -17,7 +17,7 @@ environ.Env.read_env(BASE_DIR / '.env')
 # SECURITY
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["institutoeconomiaaonatural.cocrias.com", "localhost", "127.0.0.1"])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["institutoeconomiaaonatural.cocrias.com.br", "localhost", "127.0.0.1"])
 
 # Application definition
 INSTALLED_APPS = [
