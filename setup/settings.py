@@ -151,6 +151,7 @@ Q_CLUSTER = {
 CSRF_TRUSTED_ORIGINS = [
     'https://institutoeconomiaaonatural.cocrias.com.br',
 ]
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Auth redirects
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
