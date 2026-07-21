@@ -14,5 +14,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  web:
+    build: .
+    container_name: web_economia_natural
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - sqlite_data:/app/data
+    env_file:
+      - .env
+    depends_on:
+      - db
+
 volumes:
   postgres_data:
+  sqlite_data:
