@@ -3,6 +3,10 @@ from django.contrib.auth.hashers import make_password
 
 def create_superuser(apps, schema_editor):
     User = apps.get_model('auth', 'User')
+    
+    # Puxa a senha do Coolify. Se a variável não existir, usa um fallback (útil para desenvolvimento local)
+    admin_password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'senha_padrao_local_123')
+    
     if not User.objects.filter(username='admin').exists():
         User.objects.create(
             username='admin',
