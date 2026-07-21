@@ -4,6 +4,7 @@ Django settings for setup project — Instituto Economia ao Natural
 
 import environ
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -77,12 +78,12 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # causado pelo caractere 'ç' no path do Windows com a biblioteca libpq do PostgreSQL.
 DATABASES = {
     'default': {
-        'ENGINE': env('DB_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': env('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
-        'USER': env('DB_USER', default=''),
-        'PASSWORD': env('DB_PASSWORD', default=''),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default=''),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', 'postgres'), # 'postgres' é o nome do serviço no Docker/Coolify
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 
