@@ -70,7 +70,8 @@ class Command(BaseCommand):
                                 'phone': telefone,
                                 'company': empresa,
                                 'role': cargo,
-                                'city': cidade
+                                'city': cidade,
+                                'must_change_password': user_created
                             }
                         )
                         

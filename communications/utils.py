@@ -2,6 +2,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import EmailLog, EmailTracking
 from django.urls import reverse
+import logging
+
+logger = logging.getLogger(__name__)
 
 def send_enrollment_confirmation(inscricao):
     evento = inscricao.evento
@@ -33,8 +36,8 @@ Acesse seu painel para mais informações.
     # Criar registro de rastreamento
     tracking = EmailTracking.objects.create(email_log=log)
     
-    # Montar as URLs absolutas (usando localhost para o teste de dev)
-    base_url = "http://127.0.0.1:8000"
+    # Montar as URLs absolutas usando a configuração do Django
+    base_url = settings.BASE_URL
     pixel_url = base_url + reverse('communications:track_pixel', args=[tracking.token])
     
     # URL real do painel e a URL de rastreamento de clique apontando pra ela
@@ -62,11 +65,11 @@ Acesse seu painel para mais informações.
             body,
             settings.DEFAULT_FROM_EMAIL,
             [email],
-            fail_silently=True,
+            fail_silently=False,
             html_message=html_message
         )
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        logger.error(f"Falha ao enviar e-mail de confirmacao para {email}: {e}", exc_info=True)
 
 def send_individual_reminder_task(inscricao_id, subject_template, body_template):
     from events.models import Inscricao
@@ -95,7 +98,7 @@ def send_individual_reminder_task(inscricao_id, subject_template, body_template)
     
     tracking = EmailTracking.objects.create(email_log=log)
     
-    base_url = "http://127.0.0.1:8000"  # Em prod, configurar via sites framework ou settings
+    base_url = settings.BASE_URL
     pixel_url = base_url + reverse('communications:track_pixel', args=[tracking.token])
     
     # URL do formulário de impacto: /impact/respond/<form_id>/
@@ -126,13 +129,13 @@ def send_individual_reminder_task(inscricao_id, subject_template, body_template)
             body,
             settings.DEFAULT_FROM_EMAIL,
             [email],
-            fail_silently=True,
+            fail_silently=False,
             html_message=html_message
         )
         import time
         time.sleep(2) # Delay de 2 segundos para evitar rate limit do provedor (Napoleon)
     except Exception as e:
-        print(f"Failed to send reminder email: {e}")
+        logger.error(f"Falha ao enviar e-mail de lembrete para {email}: {e}", exc_info=True)
 
 def queue_mass_reminder_emails(inscricao_ids, subject_template, body_template):
     from django_q.tasks import async_task

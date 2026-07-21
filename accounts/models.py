@@ -8,6 +8,7 @@ class Benegnado(models.Model):
     company = models.CharField('Empresa', max_length=150, blank=True)
     role = models.CharField('Cargo', max_length=100, blank=True)
     city = models.CharField('Cidade', max_length=100, blank=True)
+    must_change_password = models.BooleanField('Forcar troca de senha?', default=False)
 
     class Meta:
         verbose_name = 'Benegnado'

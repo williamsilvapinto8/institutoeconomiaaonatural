@@ -13,7 +13,10 @@
         <div>
             {% if user.is_authenticated %}
                 <span>Ola, {{ user.first_name|default:user.username }}!</span>
-                <a href="{% url 'accounts:logout' %}">Sair</a>
+                <form method="post" action="{% url 'accounts:logout' %}" style="display:inline; margin-left:10px;">
+                    {% csrf_token %}
+                    <button type="submit" style="background:none; border:none; color:inherit; text-decoration:underline; cursor:pointer; font-size:inherit; font-family:inherit; padding:0; vertical-align:middle;">Sair</button>
+                </form>
             {% else %}
                 <a href="{% url 'accounts:login' %}">Entrar</a>
                 <a href="{% url 'accounts:signup' %}">Cadastrar-se</a>

@@ -17,7 +17,15 @@ environ.Env.read_env(BASE_DIR / '.env')
 # SECURITY
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
+
+from django.core.exceptions import ImproperlyConfigured
+if not DEBUG and 'insecure' in SECRET_KEY.lower():
+    raise ImproperlyConfigured("A SECRET_KEY configurada para producao e semanticamente fraca/insegura.")
+
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=["institutoeconomiaaonatural.cocrias.com", "localhost", "127.0.0.1"])
+
+# URL base do sistema usada em links absolutos (e-mails, etc)
+BASE_URL = env('BASE_URL', default='http://127.0.0.1:8000')
 
 # Application definition
 INSTALLED_APPS = [
@@ -31,6 +39,7 @@ INSTALLED_APPS = [
     # Third-party
     'rest_framework',
     'django_q',
+    'axes',
     # Project apps
     'accounts',
     'people',
@@ -48,8 +57,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'axes.middleware.AxesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.MustChangePasswordMiddleware',
 ]
 
 ROOT_URLCONF = 'setup.urls'
@@ -153,3 +164,58 @@ Q_CLUSTER = {
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# Django Axes Security Configuration
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesStandaloneBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AXES_FAILURE_LIMIT = 5
+AXES_COOLOFF_TIME = 1  # 1 hora
+AXES_LOCKOUT_TEMPLATE = None # Usa resposta padrão de erro do Django ou podemos customizar
+AXES_RESET_ON_SUCCESS = True
+
+
+# Security headers for Production (activated when DEBUG is False)
+if not DEBUG:
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_TRUSTED_ORIGINS = ['https://institutoeconomiaaonatural.cocrias.com']
+    
+    # Configuração de envio de erros e logs estruturados em produção
+    import os
+    LOGS_DIR = BASE_DIR / 'logs'
+    if not os.path.exists(LOGS_DIR):
+        os.makedirs(LOGS_DIR)
+        
+    ADMINS = [('Equipe IEN', 'suporte@institutoeconomiaaonatural.cocrias.com')]
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'file': {
+                'level': 'ERROR',
+                'class': 'logging.FileHandler',
+                'filename': str(LOGS_DIR / 'django_error.log'),
+                'formatter': 'verbose',
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        },
+    }
+
+
