@@ -148,7 +148,9 @@ Q_CLUSTER = {
     'label': 'Django Q2',
     'orm': 'default',
 }
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://institutoeconomiaaonatural.cocrias.com.br',
+]
 # Auth redirects
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
