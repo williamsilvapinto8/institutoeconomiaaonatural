@@ -7,7 +7,7 @@ def create_superuser(apps, schema_editor):
         User.objects.create(
             username='admin',
             email='admin@example.com',
-            password=make_password('admin'),
+            password=make_password(admin_password),
             is_staff=True,
             is_superuser=True,
             is_active=True
