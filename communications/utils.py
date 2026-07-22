@@ -111,10 +111,13 @@ def send_individual_reminder_task(inscricao_id, subject_template, body_template)
         
     click_url = base_url + reverse('communications:track_click', args=[tracking.token]) + f"?next={form_url}"
     
+    button_html = f'<a href="{click_url}" style="display:inline-block; padding:10px 20px; background-color:#F3913A; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Formulário</a>'
+    body_html = body.replace(chr(10), '<br>').replace('{link}', button_html)
+    
     html_message = f"""
     <html>
         <body>
-            <p>{body.replace(chr(10), '<br>').replace('{link}', f'<a href="{click_url}" style="display:inline-block; padding:10px 20px; background-color:#F3913A; color:white; text-decoration:none; border-radius:5px; font-weight:bold;">Acessar Formulário</a>')}</p>
+            <p>{body_html}</p>
             <img src="{pixel_url}" width="1" height="1" style="display:none;" />
         </body>
     </html>
