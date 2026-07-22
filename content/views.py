@@ -4,6 +4,23 @@ from django.http import Http404
 from .models import ContentItem
 
 
+def home_view(request):
+    from events.models import Evento
+    from django.utils import timezone
+    proximos_eventos = Evento.objects.filter(
+        date__gte=timezone.now().date(),
+        is_public_enrollment_open=True
+    ).order_by('date')[:3]
+    
+    return render(request, 'home.html', {
+        'proximos_eventos': proximos_eventos,
+    })
+
+
+def sobre_view(request):
+    return render(request, 'sobre.html')
+
+
 @login_required
 def content_view(request, content_id):
     item = get_object_or_404(ContentItem, pk=content_id)

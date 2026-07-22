@@ -8,9 +8,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('', include('events.urls')),
+    path('', include('content.urls')),
+    path('blog/', include('blog.urls')),
     path('impact/', include('impact_forms.urls')),
     path('communications/', include('communications.urls')),
-    path('content/', include('content.urls')),
     path('api/', include('api.urls')),
-    path('', RedirectView.as_view(url='/dashboard/', permanent=False), name='home'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

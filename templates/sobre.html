@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre o Instituto | Economia ao Natural{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Organic Wave Shapes & Asymmetrical Clip-Paths */
+    .organic-shape-1 {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 75% 100%, 0% 85%);
+    }
+
+    .organic-avatar {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        background: linear-gradient(135deg, var(--color-teal-dark), var(--color-cyan-light));
+        padding: 6px;
+    }
+
+    .organic-avatar:hover {
+        border-radius: 40% 60% 70% 30% / 50% 60% 30% 60%;
+        transform: scale(1.03);
+    }
+
+    .organic-card {
+        border-radius: 40px 10px 40px 10px;
+        background: #ffffff;
+        box-shadow: 0 15px 35px rgba(35, 107, 134, 0.07);
+        border: 1px solid rgba(81, 176, 196, 0.15);
+    }
+
+    .organic-blob-bg {
+        position: absolute;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(81, 176, 196, 0.2) 0%, rgba(248, 250, 249, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+        pointer-events: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER SOBRE -->
+<section class="py-5 text-white position-relative overflow-hidden organic-shape-1 mb-5" style="background: var(--gradient-hero);">
+    <div class="container py-4 my-2 text-center position-relative z-1">
+        <span class="badge-soft text-white bg-white bg-opacity-25 mb-3 d-inline-block px-3 py-2">
+            <i class="bi bi-heart-fill me-1 text-warning"></i> Hospitalidade Digital & Propósito
+        </span>
+        <h1 class="display-3 text-white mb-3">QUEM SOMOS</h1>
+        <p class="lead max-w-700 mx-auto text-white-90 opacity-90 fs-5">
+            Um movimento dedicado a reaproximar o fluxo da economia da sabedoria e sustentabilidade dos ciclos naturais.
+        </p>
+    </div>
+</section>
+
+<!-- MANIFESTO & VISÃO -->
+<section class="py-4 position-relative">
+    <div class="organic-blob-bg top-0 start-0"></div>
+    <div class="container position-relative z-1">
+        <div class="row align-items-center g-5 mb-5">
+            <div class="col-lg-6">
+                <div class="organic-card p-5">
+                    <span class="badge-soft mb-3">Nosso Manifesto</span>
+                    <h2 class="display-5 text-teal mb-3">A ECONOMIA QUE REGENERA</h2>
+                    <p class="text-secondary mb-3">
+                        Acreditamos que a economia não precisa ser uma força predatória ou desumanizada. Ao olhar para a natureza, percebemos que nada na vida cresce infinitamente sem equilíbrio, renovação e cooperação mútua.
+                    </p>
+                    <p class="text-secondary mb-0">
+                        O <strong>Instituto Economia ao Natural</strong> nasceu para cultivar um ambiente de aprendizado, desenvolvimento e conexões onde benegnadores e a sociedade criam prosperidade real.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="d-flex flex-column gap-4">
+                    <div class="card-soft p-4 d-flex align-items-start gap-4">
+                        <div class="organic-avatar d-flex-shrink-0 text-white p-3 fs-3">
+                            <i class="bi bi-compass"></i>
+                        </div>
+                        <div>
+                            <h3 class="h4 text-teal mb-2">Nossa Missão</h3>
+                            <p class="text-muted mb-0 small">
+                                Fomentar modelos de negócios regenerativos, capacitar líderes conscientes e promover a sustentabilidade financeira e ambiental.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="card-soft p-4 d-flex align-items-start gap-4">
+                        <div class="organic-avatar d-flex-shrink-0 text-white p-3 fs-3">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div>
+                            <h3 class="h4 text-teal mb-2">Nossa Visão</h3>
+                            <p class="text-muted mb-0 small">
+                                Ser referência nacional na transição para ecossistemas econômicos éticos, acolhedores e integrados à natureza.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOSPITALIDADE E BENENGNADORES -->
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge-soft mb-2">Nossa Comunidade</span>
+            <h2 class="display-5 text-teal">O PAPEL DOS BENEGNADORES E BENEGNADOS</h2>
+            <p class="text-muted">
+                Um ecossistema baseado no acolhimento, na troca de saberes e na construção coletiva.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card-soft p-5 h-100 position-relative overflow-hidden">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="bg-teal text-white p-3 rounded-circle" style="background: var(--color-teal-dark);">
+                            <i class="bi bi-person-badge fs-3"></i>
+                        </div>
+                        <h3 class="h4 text-teal m-0">Os Benegnadores</h3>
+                    </div>
+                    <p class="text-muted">
+                        São os facilitadores, mentores e especialistas do Instituto. Eles doam tempo, conhecimento e lideram eventos e artigos para guiar a nossa comunidade rumo à economia sustentável.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card-soft p-5 h-100 position-relative overflow-hidden">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="bg-orange text-white p-3 rounded-circle" style="background: var(--color-orange-vibrant);">
+                            <i class="bi bi-people fs-3"></i>
+                        </div>
+                        <h3 class="h4 text-teal m-0">Os Benegnados</h3>
+                    </div>
+                    <p class="text-muted">
+                        São os participantes da nossa rede. Ao se inscreverem no Instituto, recebem acesso a encontros, materiais educativos, pesquisas e formulários de impacto transformadores.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'accounts:signup' %}" class="btn btn-cta-orange btn-lg px-5">
+                Faça Parte da Nossa Comunidade <i class="bi bi-arrow-right-short fs-4"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

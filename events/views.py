@@ -16,7 +16,6 @@ def dashboard_view(request):
         for inscricao in inscricoes:
             evento = inscricao.evento
             responded = False
-            # Check if user responded to this event's form
             if inscricao.status == 'CONFIRMED':
                 responded = any(
                     form.responses.filter(benegnado=benegnado).exists()
@@ -32,19 +31,75 @@ def dashboard_view(request):
         benegnado = None
     
     is_benegnador = hasattr(request.user, 'benegnador')
+    is_staff = request.user.is_staff
+    
+    managed_events_kpis = []
+    if is_staff or is_benegnador:
+        from impact_forms.models import ImpactResponse, ImpactDimension
+        from django.db.models import Avg
+        
+        if is_staff:
+            eventos_gerenciados = Evento.objects.all().order_by('-date')
+        else:
+            eventos_gerenciados = Evento.objects.filter(benegnadores=request.user.benegnador).order_by('-date')
+            
+        dimensions = ImpactDimension.objects.all()
+            
+        for evento in eventos_gerenciados:
+            responses = ImpactResponse.objects.filter(impact_form__event=evento)
+            iih_list = [r.calculate_iih() for r in responses]
+            iih_geral = sum(iih_list) / len(iih_list) if iih_list else 0.0
+            
+            dimensoes_kpis = []
+            for dim in dimensions:
+                avg = responses.filter(answers__impact_question__dimension=dim).aggregate(
+                    mean=Avg('answers__value')
+                )['mean']
+                dimensoes_kpis.append({
+                    'name': dim.name,
+                    'media': round(avg, 2) if avg else None
+                })
+                
+            cancelled_count = evento.inscricoes.filter(status='CANCELLED').count()
+            
+            managed_events_kpis.append({
+                'evento': evento,
+                'iih_geral': round(iih_geral, 2),
+                'dimensoes': dimensoes_kpis,
+                'cancelled_count': cancelled_count,
+                'total_responses': responses.count()
+            })
     
     context = {
         'user_eventos': user_eventos,
         'has_benegnado': benegnado is not None,
         'is_benegnador': is_benegnador,
+        'managed_events_kpis': managed_events_kpis,
     }
     
     return render(request, 'events/dashboard.html', context)
 
 
 def public_event_list(request):
-    eventos = Evento.objects.filter(is_public_enrollment_open=True, date__gte=timezone.now().date()).order_by('date')
-    return render(request, 'events/public_list.html', {'eventos': eventos})
+    from django.db.models import Q
+    today = timezone.now().date()
+    
+    # Eventos futuros ou de hoje que estão com inscrição aberta
+    eventos_ativos = Evento.objects.filter(
+        date__gte=today,
+        is_public_enrollment_open=True
+    ).order_by('date')
+    
+    # Eventos passados OU com inscrições encerradas
+    eventos_encerrados = Evento.objects.filter(
+        Q(date__lt=today) | Q(is_public_enrollment_open=False)
+    ).order_by('-date')
+    
+    context = {
+        'eventos_ativos': eventos_ativos,
+        'eventos_encerrados': eventos_encerrados,
+    }
+    return render(request, 'events/public_list.html', context)
 
 
 def public_event_detail(request, public_slug):

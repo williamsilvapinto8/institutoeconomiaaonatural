@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ evento.title }} | Instituto Economia ao Natural{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <a href="{% url 'public_event_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3 mb-4">
+                <i class="bi bi-arrow-left me-1"></i> Voltar para Lista de Eventos
+            </a>
+
+            <div class="card-soft p-4 p-md-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-teal bg-opacity-10 text-teal fw-bold px-3 py-2 rounded-pill small">
+                        {{ evento.event_type.name }}
+                    </span>
+                    <span class="text-muted small">
+                        <i class="bi bi-calendar3 me-1"></i> {{ evento.date|date:"d/m/Y" }}
+                    </span>
+                </div>
+
+                <h1 class="display-5 text-teal mb-4">{{ evento.title }}</h1>
+
+                <div class="bg-light rounded-4 p-4 mb-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <strong class="d-block text-secondary small">Horário</strong>
+                            <span><i class="bi bi-clock me-1 text-teal"></i> {{ evento.start_time|time:"H:i" }} às {{ evento.end_time|time:"H:i" }}</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <strong class="d-block text-secondary small">Formato/Local</strong>
+                            {% if evento.is_online %}
+                                <span><i class="bi bi-laptop me-1 text-cyan"></i> Online ({{ evento.online_platform|default:"Plataforma Digital" }})</span>
+                            {% else %}
+                                <span><i class="bi bi-geo-alt me-1 text-teal"></i> {{ evento.location|default:"A definir" }}</span>
+                            {% endif %}
+                        </div>
+                        {% if evento.vacancies_left is not None %}
+                        <div class="col-sm-6">
+                            <strong class="d-block text-secondary small">Vagas Restantes</strong>
+                            <span class="badge bg-warning text-dark px-3 py-1 rounded-pill mt-1">{{ evento.vacancies_left }} vagas</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h3 class="h5 text-teal mb-3">Sobre este evento</h3>
+                    <p class="text-secondary" style="white-space: pre-line;">
+                        {{ evento.description|default:"Nenhuma informação adicional fornecida." }}
+                    </p>
+                </div>
+
+                <!-- FORMULÁRIO DE INSCRIÇÃO / STATUS -->
+                <div class="border-top pt-4 text-center">
+                    {% if not evento.is_public_enrollment_open %}
+                        <div class="alert alert-secondary rounded-4 m-0" role="alert">
+                            <i class="bi bi-info-circle me-1"></i> As inscrições para este evento foram encerradas.
+                        </div>
+                    {% elif is_enrolled %}
+                        <div class="alert alert-success rounded-4 mb-3" role="alert">
+                            <div class="mb-2"><i class="bi bi-check-circle-fill me-1"></i> Você já está inscrito neste evento!</div>
+                            <a href="{% url 'dashboard' %}" class="alert-link text-decoration-none border-bottom border-success pb-1 small">Acessar meu Painel de Membro <i class="bi bi-arrow-right-short"></i></a>
+                        </div>
+                        <form method="post" action="{% url 'unenroll_event' event_id=evento.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger rounded-pill px-4">Cancelar Inscrição</button>
+                        </form>
+                    {% else %}
+                        {% if user.is_authenticated %}
+                            {% if user.benegnado %}
+                                <form method="post" action="{% url 'enroll_event' event_id=evento.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-cta-orange btn-lg px-5">
+                                        Confirmar Minha Inscrição <i class="bi bi-check2-circle fs-4 me-1"></i>
+                                    </button>
+                                </form>
+                            {% else %}
+                                <div class="alert alert-warning rounded-4 mb-3" role="alert">
+                                    Apenas contas de Benegnado (Participante) podem se inscrever.
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <p class="text-muted mb-3">Para se inscrever neste evento, faça login ou cadastre-se no Instituto.</p>
+                            <a href="{% url 'accounts:login' %}?next={{ request.path }}" class="btn btn-cta-orange btn-lg px-5">
+                                Entrar para se Inscrever
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

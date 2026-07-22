@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block title %}Instituto Economia ao Natural | Home{% endblock %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section class="py-5 text-white position-relative overflow-hidden" style="background: var(--gradient-hero); border-radius: 0 0 40px 40px;">
+    <div class="container py-5 my-3 position-relative z-1">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <span class="badge-soft text-white bg-white bg-opacity-25 mb-3 d-inline-block px-3 py-2">
+                    <i class="bi bi-brightness-high-fill text-warning me-1"></i> Economia Regenerativa & Sustentabilidade
+                </span>
+                <h1 class="display-3 text-white mb-3" style="line-height: 1.1;">
+                    DESENVOLVIMENTO ECONÔMICO EM HARMONIA COM A NATUREZA
+                </h1>
+                <p class="lead text-white-90 mb-4 opacity-90 fs-5">
+                    Conectando pessoas, negócios e propósitos para construir um ecossistema sustentável, justo e alinhado aos ciclos naturais da nossa sociedade.
+                </p>
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-cta-orange btn-lg fs-6">
+                        Inscrever-se Agora <i class="bi bi-arrow-right-short fs-4"></i>
+                    </a>
+                    <a href="{% url 'sobre' %}" class="btn btn-outline-custom btn-lg fs-6">
+                        Conhecer o Instituto
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="position-relative d-inline-block">
+                    <div class="bg-white p-4 rounded-5 shadow-lg text-dark text-start" style="max-width: 400px; transform: rotate(1.5deg);">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="bg-teal p-3 rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: var(--color-teal-dark);">
+                                <i class="bi bi-people-fill fs-4"></i>
+                            </div>
+                            <div>
+                                <h6 class="m-0 fw-bold">Comunidade Viva</h6>
+                                <small class="text-muted">Rede de Benegnados</small>
+                            </div>
+                        </div>
+                        <p class="small text-secondary mb-0">
+                            "A economia ao natural não é sobre desacelerar, mas sobre acelerar a direção correta."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PILARES / RESUMO -->
+<section class="py-5">
+    <div class="container py-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <h2 class="display-5 text-teal mb-2">NOSSOS PILARES DE ATUAÇÃO</h2>
+            <p class="text-muted">Transformando a teoria econômica em práticas tangíveis de impacto positivo.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card-soft p-4 h-100 text-center">
+                    <div class="rounded-circle d-inline-flex p-3 mb-3" style="background: rgba(81, 176, 196, 0.15); color: var(--color-teal-dark);">
+                        <i class="bi bi-seedling fs-1"></i>
+                    </div>
+                    <h3 class="h4 text-teal mb-3">Sustentabilidade Natural</h3>
+                    <p class="text-muted mb-0">
+                        Práticas econômicas que respeitam a capacidade de regeneração do ecossistema e promovem o equilíbrio.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-soft p-4 h-100 text-center">
+                    <div class="rounded-circle d-inline-flex p-3 mb-3" style="background: rgba(243, 145, 58, 0.15); color: var(--color-orange-vibrant);">
+                        <i class="bi bi-heart-pulse fs-1"></i>
+                    </div>
+                    <h3 class="h4 text-teal mb-3">Hospitalidade & Impacto</h3>
+                    <p class="text-muted mb-0">
+                        Acolhimento digital e presencial para cultivar redes de colaboração entre benegnadores e a comunidade.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card-soft p-4 h-100 text-center">
+                    <div class="rounded-circle d-inline-flex p-3 mb-3" style="background: rgba(35, 107, 134, 0.15); color: var(--color-teal-dark);">
+                        <i class="bi bi-graph-up-arrow fs-1"></i>
+                    </div>
+                    <h3 class="h4 text-teal mb-3">Educação Consciente</h3>
+                    <p class="text-muted mb-0">
+                        Eventos, artigos e dados que capacitam indivíduos a tomarem decisões financeiras e sociais éticas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRÓXIMOS EVENTOS -->
+{% if proximos_eventos %}
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <span class="badge-soft">Agenda</span>
+                <h2 class="display-5 text-teal m-0">PRÓXIMOS EVENTOS</h2>
+            </div>
+            <a href="{% url 'public_event_list' %}" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">
+                Ver Todos os Eventos <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="row g-4">
+            {% for evento in proximos_eventos %}
+            <div class="col-lg-4 col-md-6">
+                <div class="card-soft h-100 d-flex flex-column">
+                    <div class="p-4 flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="badge bg-teal bg-opacity-10 text-teal fw-bold px-3 py-2 rounded-pill small">
+                                {{ evento.event_type.name }}
+                            </span>
+                            <small class="text-muted fw-semibold">
+                                <i class="bi bi-calendar-event me-1"></i> {{ evento.date|date:"d/m/Y" }}
+                            </small>
+                        </div>
+                        <h3 class="h4 text-dark mb-2">{{ evento.title }}</h3>
+                        <p class="text-muted small mb-3">
+                            {{ evento.description|truncatewords:20 }}
+                        </p>
+                        <div class="small text-secondary">
+                            <i class="bi bi-clock me-1"></i> {{ evento.start_time|time:"H:i" }} - {{ evento.end_time|time:"H:i" }}
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 border-0 bg-transparent">
+                        <a href="{% url 'public_event_detail' public_slug=evento.public_slug %}" class="btn btn-cta-orange w-100 py-2">
+                            Garantir Minha Vaga
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- BLOCO DE COMUNIDADE & REDES SOCIAIS -->
+<section class="py-5" style="background: var(--gradient-soft);">
+    <div class="container py-4 text-center">
+        <span class="badge-soft mb-2">Conecte-se</span>
+        <h2 class="display-5 text-teal mb-3">ACOMPANHE O INSTITUTO NAS REDES</h2>
+        <p class="text-muted mb-4 max-w-700 mx-auto">
+            Fique por dentro das nossas reflexões diárias, dados de impacto, notícias e bastidores da nossa causa.
+        </p>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="card-soft p-4 text-center h-100">
+                    <i class="bi bi-instagram fs-1 text-danger mb-3"></i>
+                    <h4 class="h5">Instagram</h4>
+                    <p class="small text-muted mb-3">Postagens diárias sobre economia e práticas sustentáveis.</p>
+                    <a href="https://instagram.com" target="_blank" class="btn btn-sm btn-outline-danger rounded-pill px-4">@instituto.economia</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card-soft p-4 text-center h-100">
+                    <i class="bi bi-linkedin fs-1 text-primary mb-3"></i>
+                    <h4 class="h5">LinkedIn</h4>
+                    <p class="small text-muted mb-3">Rede profissional de parceiros e benegnadores.</p>
+                    <a href="https://linkedin.com" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill px-4">Instituto Economia ao Natural</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

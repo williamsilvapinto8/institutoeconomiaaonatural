@@ -1,5 +1,6 @@
 from django.db import migrations
 from django.contrib.auth.hashers import make_password
+import os
 
 def create_superuser(apps, schema_editor):
     User = apps.get_model('auth', 'User')

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+{% block title %}Eventos | Instituto Economia ao Natural{% endblock %}
+
+{% block extra_css %}
+<style>
+    .event-card-active {
+        border-left: 5px solid var(--color-cyan-light);
+    }
+    
+    .event-card-closed {
+        filter: grayscale(75%);
+        opacity: 0.75;
+        background-color: #F1F5F9;
+        border-left: 5px solid #94A3B8;
+        transition: all 0.3s ease;
+    }
+    
+    .event-card-closed:hover {
+        filter: grayscale(30%);
+        opacity: 0.95;
+    }
+
+    .btn-disabled-custom {
+        background-color: #CBD5E1 !important;
+        color: #64748B !important;
+        border: none !important;
+        cursor: not-allowed !important;
+        box-shadow: none !important;
+        pointer-events: none;
+    }
+
+    .separator-custom {
+        border: 0;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(81, 176, 196, 0.1) 0%, rgba(35, 107, 134, 0.4) 50%, rgba(81, 176, 196, 0.1) 100%);
+        margin: 3.5rem 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- HEADER -->
+<section class="py-5 text-white" style="background: var(--gradient-hero); border-radius: 0 0 30px 30px;">
+    <div class="container py-3 text-center">
+        <span class="badge-soft text-white bg-white bg-opacity-25 mb-2 d-inline-block px-3 py-1">
+            <i class="bi bi-calendar-event me-1"></i> Agenda do Instituto
+        </span>
+        <h1 class="display-4 text-white mb-2">ENCONTROS & EVENTOS</h1>
+        <p class="lead max-w-700 mx-auto text-white-90 opacity-90 fs-6">
+            Participe dos nossos encontros, workshops e encontros de impacto comunitário.
+        </p>
+    </div>
+</section>
+
+<div class="container py-5">
+
+    <!-- SESSÃO 1: EVENTOS ATIVOS -->
+    <div class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <span class="badge bg-teal bg-opacity-10 text-teal fw-bold px-3 py-2 rounded-pill small mb-2 d-inline-block">
+                    <i class="bi bi-broadcast me-1"></i> Inscrições Abertas
+                </span>
+                <h2 class="display-6 text-teal m-0">EVENTOS DISPONÍVEIS</h2>
+            </div>
+            <span class="text-muted small fw-semibold">
+                {{ eventos_ativos|length }} evento(s) ativo(s)
+            </span>
+        </div>
+
+        {% if eventos_ativos %}
+            <div class="row g-4">
+                {% for evento in eventos_ativos %}
+                <div class="col-lg-6">
+                    <div class="card-soft event-card-active h-100 p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-info bg-opacity-10 text-cyan fw-bold px-3 py-2 rounded-pill small">
+                                    {{ evento.event_type.name }}
+                                </span>
+                                {% if evento.vacancies_left is not None %}
+                                    {% if evento.vacancies_left > 0 %}
+                                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 fw-semibold px-3 py-2 rounded-pill small">
+                                            <i class="bi bi-ticket-perforated me-1"></i> {{ evento.vacancies_left }} vagas restantes
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger fw-semibold px-3 py-2 rounded-pill small">
+                                            <i class="bi bi-x-circle me-1"></i> Esgotado
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge bg-success bg-opacity-10 text-success fw-semibold px-3 py-2 rounded-pill small">
+                                        <i class="bi bi-infinity me-1"></i> Vagas ilimitadas
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <h3 class="h4 text-dark mb-2">{{ evento.title }}</h3>
+                            <p class="text-muted small mb-4">
+                                {{ evento.description|default:"Sem descrição informada."|truncatewords:25 }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <div class="bg-light rounded-3 p-3 mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2 small text-secondary">
+                                <div>
+                                    <i class="bi bi-calendar3 me-1 text-teal"></i> <strong>{{ evento.date|date:"d/m/Y" }}</strong>
+                                </div>
+                                <div>
+                                    <i class="bi bi-clock me-1 text-teal"></i> {{ evento.start_time|time:"H:i" }} - {{ evento.end_time|time:"H:i" }}
+                                </div>
+                                <div>
+                                    {% if evento.is_online %}
+                                        <i class="bi bi-laptop me-1 text-cyan"></i> Online ({{ evento.online_platform|default:"Plataforma Digital" }})
+                                    {% else %}
+                                        <i class="bi bi-geo-alt me-1 text-teal"></i> {{ evento.location|default:"Presencial" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <a href="{% url 'public_event_detail' public_slug=evento.public_slug %}" class="btn btn-cta-orange w-100 py-2">
+                                Increver-se / Ver Detalhes <i class="bi bi-arrow-right-short fs-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card-soft p-5 text-center my-4">
+                <i class="bi bi-calendar-x text-muted fs-1 mb-3"></i>
+                <h4 class="h5 text-secondary mb-2">Nenhum evento ativo no momento</h4>
+                <p class="text-muted small m-0">Fique atento às nossas redes para a abertura dos próximos encontros!</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- SEPARADOR -->
+    <div class="position-relative text-center my-5">
+        <hr class="separator-custom">
+        <span class="position-absolute top-50 start-50 translate-middle bg-body-tertiary px-4 py-1 text-muted small fw-semibold rounded-pill border">
+            <i class="bi bi-archive me-1"></i> Histórico de Encontros
+        </span>
+    </div>
+
+    <!-- SESSÃO 2: EVENTOS ENCERRADOS -->
+    <div>
+        <div class="mb-4">
+            <span class="badge bg-secondary bg-opacity-10 text-secondary fw-bold px-3 py-2 rounded-pill small mb-2 d-inline-block">
+                <i class="bi bi-clock-history me-1"></i> Passados ou Encerrados
+            </span>
+            <h2 class="display-6 text-secondary m-0">EVENTOS ENCERRADOS</h2>
+        </div>
+
+        {% if eventos_encerrados %}
+            <div class="row g-4">
+                {% for evento in eventos_encerrados %}
+                <div class="col-lg-6">
+                    <div class="card-soft event-card-closed h-100 p-4 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-secondary bg-opacity-25 text-dark fw-semibold px-3 py-2 rounded-pill small">
+                                    {{ evento.event_type.name }}
+                                </span>
+                                <span class="badge bg-dark bg-opacity-10 text-secondary fw-semibold px-3 py-2 rounded-pill small">
+                                    <i class="bi bi-lock-fill me-1"></i> Inscrições Encerradas
+                                </span>
+                            </div>
+
+                            <h3 class="h5 text-secondary mb-2">{{ evento.title }}</h3>
+                            <p class="text-muted small mb-4">
+                                {{ evento.description|default:"Sem descrição informada."|truncatewords:25 }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <div class="bg-white bg-opacity-50 rounded-3 p-3 mb-3 d-flex flex-wrap justify-content-between align-items-center gap-2 small text-muted">
+                                <div>
+                                    <i class="bi bi-calendar3 me-1"></i> {{ evento.date|date:"d/m/Y" }}
+                                </div>
+                                <div>
+                                    <i class="bi bi-clock me-1"></i> {{ evento.start_time|time:"H:i" }} - {{ evento.end_time|time:"H:i" }}
+                                </div>
+                                <div>
+                                    {% if evento.is_online %}
+                                        <i class="bi bi-laptop me-1"></i> Online
+                                    {% else %}
+                                        <i class="bi bi-geo-alt me-1"></i> {{ evento.location|default:"Presencial" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <button class="btn btn-secondary btn-disabled-custom w-100 py-2" disabled>
+                                Inscrições Encerradas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-muted text-center my-4">Nenhum evento encerrado no histórico.</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

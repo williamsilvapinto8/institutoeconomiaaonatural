@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'impact_forms',
     'communications',
     'content',
+    'blog',
     'api',
 ]
 
@@ -89,12 +90,8 @@ WSGI_APPLICATION = 'setup.wsgi.application'
 # causado pelo caractere 'ç' no path do Windows com a biblioteca libpq do PostgreSQL.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST', 'postgres'), # 'postgres' é o nome do serviço no Docker/Coolify
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

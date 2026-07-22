@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Editar Artigo{% else %}Novo Artigo{% endif %} | Blog{% endblock %}
+
+{% block extra_css %}
+<!-- jQuery (Necessário para o Summernote Lite) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Summernote Lite WYSIWYG CDN -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<style>
+    .note-editor.note-frame {
+        border-radius: 16px;
+        border: 1px solid #CBD5E1;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .note-toolbar {
+        background-color: #F8FAF9 !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3">
+                    <i class="bi bi-arrow-left me-1"></i> Cancelar / Voltar
+                </a>
+            </div>
+
+            <div class="card-soft p-4 p-md-5">
+                <h2 class="display-6 text-teal mb-4">
+                    {% if object %}
+                        <i class="bi bi-pencil-square text-cyan me-2"></i> EDITAR ARTIGO
+                    {% else %}
+                        <i class="bi bi-journal-plus text-cyan me-2"></i> CRIAR NOVO ARTIGO
+                    {% endif %}
+                </h2>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- TÍTULO -->
+                    <div class="mb-4">
+                        <label for="id_title" class="form-label fw-semibold text-dark">Título do Artigo *</label>
+                        <input type="text" name="title" id="id_title" class="form-control form-control-lg rounded-3" required value="{{ form.title.value|default:'' }}" placeholder="Ex: A importância dos Ciclos Naturais na Economia">
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- IMAGEM DE CAPA -->
+                    <div class="mb-4">
+                        <label for="id_cover_image" class="form-label fw-semibold text-dark">Imagem de Capa (Opcional)</label>
+                        <input type="file" name="cover_image" id="id_cover_image" class="form-control rounded-3" accept="image/*">
+                        {% if object.cover_image %}
+                            <small class="text-muted d-block mt-2">Imagem atual: <a href="{{ object.cover_image.url }}" target="_blank">{{ object.cover_image.name }}</a></small>
+                        {% endif %}
+                        {% if form.cover_image.errors %}
+                            <div class="text-danger small mt-1">{{ form.cover_image.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- CONTEÚDO WYSIWYG -->
+                    <div class="mb-4">
+                        <label for="id_content" class="form-label fw-semibold text-dark">Conteúdo do Artigo *</label>
+                        <textarea name="content" id="id_content" required>{{ form.content.value|default:'' }}</textarea>
+                        {% if form.content.errors %}
+                            <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- STATUS DE PUBLICAÇÃO -->
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" name="is_published" id="id_is_published" {% if form.is_published.value or form.is_published.value is None %}checked{% endif %}>
+                        <label class="form-check-label fw-semibold text-dark" for="id_is_published">
+                            Publicar imediatamente (Visível para todos os leitores)
+                        </label>
+                    </div>
+
+                    <!-- BOTÕES DE AÇÃO -->
+                    <div class="d-flex gap-3 pt-3 border-top">
+                        <button type="submit" class="btn btn-cta-orange btn-lg px-5">
+                            {% if object %}Salvar Alterações{% else %}Publicar Artigo{% endif %} <i class="bi bi-check-lg ms-1"></i>
+                        </button>
+                        <a href="{% url 'blog:post_list' %}" class="btn btn-light rounded-pill px-4">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#id_content').summernote({
+            placeholder: 'Escreva seu artigo aqui... Você pode adicionar negrito, itálico, títulos, imagens e links com facilidade.',
+            tabsize: 2,
+            height: 380,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview']]
+            ],
+            lang: 'pt-BR'
+        });
+    });
+</script>
+{% endblock %}
