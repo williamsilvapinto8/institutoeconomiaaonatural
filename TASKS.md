@@ -319,3 +319,23 @@ estritamente seguida.
 - [x] **Tarefa 9.3: Customização da Identidade Visual do Django Admin**
   - Sobrescrita do `base_site.html` do Admin para aplicar a paleta de cores corporativa (Teal/Laranja) e fontes.
   - Adição da logo da marca na tela de login e cabeçalho interno do Admin.
+
+---
+
+## 🆕 FASE 10: Frontend Institucional Soft UI, App de Blog e Dashboard Integrado
+- [x] **Tarefa 10.1: Sistema de Design Soft UI e Páginas Institucionais**
+  - Implementação do `base.css` com variáveis de cores institucionais (Teal #236B86, Ciano #51B0C4, Laranja #F3913A), tipografias Google Fonts (Bebas Neue / Inter), sombras suaves e border-radius.
+  - Criação do template base (`base.html`) com navbar responsiva, menu dropdown suspenso para usuários autenticados e rodapé.
+  - Criação da página Home (`home.html`) com hero section em gradiente, blocos de pilares e destaque de eventos.
+  - Criação da página Sobre (`sobre.html`) com layout acolhedor e formas orgânicas customizadas via `clip-path`.
+- [x] **Tarefa 10.2: Novo App `blog` com Editor WYSIWYG**
+  - Criação da aplicação Django `blog` com modelo `Post` (Título, Slug, Conteúdo HTML, Autor, Imagem de Capa, Status).
+  - Implementação de permissões granulares (`StaffOrBenegnadorRequiredMixin`) para restrição de criação e edição.
+  - Integração do editor leve WYSIWYG **Summernote Lite** via CDN no formulário de criação/edição.
+  - Criação dos templates de listagem (`post_list.html`), leitura amigável (`post_detail.html`), formulário (`post_form.html`) e exclusão (`post_confirm_delete.html`).
+- [x] **Tarefa 10.3: Reformulação das Páginas Públicas de Eventos**
+  - Atualização da view `public_event_list` e template `public_list.html` dividindo em duas seções: Eventos Ativos (com vagas dinâmicas e CTA Laranja) e Eventos Encerrados (estilo opaco em escala de cinza e botão desabilitado).
+  - Atualização do template `public_detail.html` com confirmação de inscrição e link direto para o Painel do Membro.
+- [x] **Tarefa 10.4: Painel do Membro Integrado com KPIs de Impacto**
+  - Reformulação visual do Dashboard (`/dashboard/`) para participantes, facilitadores e administradores.
+  - Integração de relatórios de KPIs em tempo real (IIH Geral, Respostas, Cancelamentos e Dimensões de Impacto) diretamente na área logada do site para Staff e Benegnadores.

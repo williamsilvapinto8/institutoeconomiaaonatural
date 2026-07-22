@@ -180,16 +180,55 @@ Django REST Framework.
   EventoSerializer, ImpactFormSerializer, ImpactResponseSerializer,
   🆕 InscricaoSerializer.
 
+### 2.8. 🆕 App `blog`
+
+Módulo completo para publicação e gestão de artigos e pesquisas sobre economia regenerativa.
+
+- Modelos:
+  - `Post`:
+    - title (CharField)
+    - slug (SlugField único, gerado via slugify)
+    - content (TextField em formato HTML Rich Text)
+    - author (ForeignKey para User)
+    - cover_image (ImageField, opcional)
+    - is_published (BooleanField, default=True)
+    - created_at / updated_at (DateTimeField)
+- Permissões:
+  - Visualização pública dos artigos.
+  - Criação, edição e exclusão restritas via `@staff_or_benegnador_required` e `StaffOrBenegnadorRequiredMixin` para usuários Staff e Benegnadores.
+- Editor Integrado:
+  - Summernote Lite via CDN no formulário de postagem para edição WYSIWYG leve sem depender de pacotes pesados no backend.
+
 ---
 
 ## 3. Rotas Principais do Sistema
-ÁREA PÚBLICA: ├── / -> Home Institucional ├── /accounts/login/ -> Login de Benegnados ├── /accounts/signup/ -> Auto-cadastro de Benegnados ├── 🆕 /events/public// -> Página pública do evento │ (descrição, data, local, │ botão "Inscrever-se") └── 🆕 /events/public/ -> Listagem pública de eventos com inscrições abertas
+ÁREA PÚBLICA:
+├── / -> Home Institucional
+├── /sobre/ -> Página Sobre o Instituto (Design Orgânico)
+├── /accounts/login/ -> Login de Benegnados
+├── /accounts/signup/ -> Auto-cadastro de Benegnados
+├── /events/public/<slug>/ -> Página pública do evento (detalhes e inscrição)
+├── /events/public/ -> Listagem pública de eventos (Ativos vs Encerrados)
+├── /blog/ -> Listagem pública de artigos do Blog
+└── /blog/<slug>/ -> Leitura do artigo
 
-ÁREA DO BENEGNADO (Autenticado): ├── /dashboard/ -> Lista de eventos + status │ dos questionários ├── 🆕 /events/enroll// -> Ação de inscrição (POST) — │ cria Inscricao vinculada │ ao usuário logado e │ redireciona de volta com │ mensagem de sucesso ├── 🆕 /events/unenroll// -> Ação de cancelamento de │ inscrição (marca │ Inscricao.status=CANCELLED) ├── /impact/respond// -> Formulário de avaliação │ de impacto humano ├── /impact/success/ -> Tela de agradecimento │ pós-resposta └── /content/view// -> Visualização segura do material do evento
+ÁREA DO BENEGNADO (Autenticado):
+├── /dashboard/ -> Painel do Membro (Inscrições + KPIs de Impacto para Gestores)
+├── /events/enroll/<int:event_id>/ -> Ação de inscrição (POST)
+├── /events/unenroll/<int:event_id>/ -> Ação de cancelamento de inscrição
+├── /impact/respond/<form_id>/ -> Formulário de avaliação de impacto humano
+├── /impact/success/ -> Tela de agradecimento pós-resposta
+└── /content/view/<content_id>/ -> Visualização segura do material do evento
 
-ÁREA DO BENEGNADOR (🆕 Autenticado, se tiver login próprio): └── 🆕 /events/create/ -> Formulário de criação de evento (gera public_slug automaticamente)
+ÁREA DO BENEGNADOR / STAFF (Autenticado):
+├── /events/create/ -> Formulário de criação de evento
+├── /blog/novo/ -> Formulário de criação de artigo no Blog (Editor WYSIWYG)
+├── /blog/<slug>/editar/ -> Formulário de edição de artigo
+└── /blog/<slug>/deletar/ -> Confirmação e exclusão de artigo
 
-ÁREA ADMINISTRATIVA (Customizada & Django Admin): ├── /admin/ -> Painel administrativo │ padrão Django customizado └── /admin/dashboard-kpi// -> Dashboard estatístico de KPIs por evento
+ÁREA ADMINISTRATIVA (Customizada & Django Admin):
+├── /admin/ -> Painel administrativo padrão Django customizado
+└── /admin/dashboard-kpi/<event_id>/ -> Dashboard estatístico de KPIs por evento
 
 RASTREAMENTO DE COMUNICAÇÕES (Endpoints Técnicos): ├── /communications/track/pixel// -> Pixel de abertura de │ email (retorna PNG 1x1) └── /communications/track/click// -> Redirecionamento e registro de clique
 
@@ -293,6 +332,12 @@ cron para `process_scheduled_emails`.)
   - Comando CLI para importação de CSV (`import_participants`).
   - Painel de Lembretes no admin com envio assíncrono em massa (`django-q2`).
   - Identidade visual do admin do Django 100% customizada.
+- **Frontend Institucional Soft UI & Novo Motor de Blog:**
+  - Sistema de Design Soft UI com paleta Teal/Ciano/Laranja e tipografia Bebas Neue e Inter.
+  - Páginas institucionais de alta conversão: Home (`/`) e Sobre (`/sobre/`).
+  - Novo App `blog` com modelo `Post`, CRUD completo e integração com editor WYSIWYG Summernote Lite via CDN.
+  - Reformulação da listagem pública de eventos (`/events/public/`) dividida entre Eventos Ativos e Eventos Encerrados.
+  - Reformulação do Painel do Membro (`/dashboard/`) com cartões visuais de KPIs em tempo real (IIH, Média por Dimensão, Respostas e Cancelamentos) para gestores e administradores.
 
 ---
 
